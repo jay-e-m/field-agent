@@ -70,12 +70,35 @@ class SecurityClearanceServiceTest {
 
     @Test
     void shouldDeleteById() {
-        assertFalse(service.deleteById(3));
+        // Mock the repository response
+        when(repository.isSecurityClearanceInUse(3)).thenReturn(false); // Assuming it's not in use for this test
+        when(repository.deleteById(3)).thenReturn(false);
 
+        Result<Void> result = service.deleteById(3);
+        assertFalse(result.isSuccess());
+
+        // Change the behavior of the mocked repository
         when(repository.deleteById(3)).thenReturn(true);
-        assertTrue(service.deleteById(3));
+
+        result = service.deleteById(3);
+        assertTrue(result.isSuccess());
     }
 
+    @Test
+    void shouldNotUpdateDuplicate() {
+        SecurityClearance securityClearance = makeSecurityClearance();
+        securityClearance.setSecurityClearanceId(1);
+
+        SecurityClearance existing = makeSecurityClearance();
+        existing.setSecurityClearanceId(2);
+
+        when(repository.findByName(securityClearance.getName())).thenReturn(existing);
+
+        Result<SecurityClearance> actual = service.update(securityClearance);
+
+        assertEquals(ResultType.INVALID, actual.getType());
+        assertTrue(actual.getMessages().contains("Security Clearance with the same name already exists"));
+    }
 
     private SecurityClearance makeSecurityClearance() {
         SecurityClearance securityClearance = new SecurityClearance();

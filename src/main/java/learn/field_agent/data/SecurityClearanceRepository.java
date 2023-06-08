@@ -12,4 +12,5 @@ public interface SecurityClearanceRepository {
     SecurityClearance add(SecurityClearance securityClearance);
     boolean update(SecurityClearance securityClearance);
     boolean deleteById(int securityClearanceId);
+    boolean isSecurityClearanceInUse(int securityClearanceId);
 }

@@ -109,12 +109,18 @@ begin
     alter table alias auto_increment = 1;
     delete from agent;
     alter table agent auto_increment = 1;
-    
+    delete from security_clearance;
+    alter table security_clearance auto_increment = 1;
+
+	insert into security_clearance values
+	(1, 'Secret'),
+    (2, 'Top Secret');
+
     insert into agency(agency_id, short_name, long_name) values
         (1, 'ACME', 'Agency to Classify & Monitor Evildoers'),
         (2, 'MASK', 'Mobile Armored Strike Kommand'),
         (3, 'ODIN', 'Organization of Democratic Intelligence Networks');
-        
+
 	insert into location (location_id, name, address, city, region, country_code, postal_code, agency_id)
 		values
 	(1, 'HQ', '123 Elm', 'Des Moines', 'IA', 'USA', '55555', 1),
@@ -123,9 +129,9 @@ begin
 	(4, 'Remote', '999 Nine St.', 'Test', 'WI', 'USA', '55555', 2),
 	(5, 'HQ', '123 Elm', 'Test', 'WI', 'USA', '55555', 3), -- for delete tests
 	(6, 'Remote', '999 Nine St.', 'Test', 'WI', 'USA', '55555', 3);
-        
-	insert into agent 
-		(first_name, middle_name, last_name, dob, height_in_inches) 
+
+	insert into agent
+		(first_name, middle_name, last_name, dob, height_in_inches)
 	values
 		('Hazel','C','Sauven','1954-09-16',76),
 		('Claudian','C','O''Lynn','1956-11-09',41),
@@ -135,14 +141,14 @@ begin
 		('Urban','H','Carwithen',null,58),
 		('Ulises','B','Muhammad','2008-04-01',80),
 		('Phylys','Y','Howitt','1979-03-28',68);
-        
+
     insert into alias (`name`, persona, agent_id)
-    values 
+    values
         ('Nutmeg', null, 1),
         ('Bob', null, 2),
         ('Alice', "Persona", 1);
-        
-	insert into agency_agent 
+
+	insert into agency_agent
 		(agency_id, agent_id, identifier, security_clearance_id, activation_date)
     select
         agency.agency_id,                              -- agency_id
@@ -155,11 +161,7 @@ begin
     where agent.agent_id not in (6, 8)
     and agency.agency_id != 2;
 
+
 end //
 -- 4. Change the statement terminator back to the original.
 delimiter ;
-
--- data
-insert into security_clearance values
-	(1, 'Secret'),
-    (2, 'Top Secret');

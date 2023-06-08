@@ -84,4 +84,15 @@ public class SecurityClearanceJdbcTemplateRepository implements SecurityClearanc
         final String sql = "delete from security_clearance where security_clearance_id = ?;";
         return jdbcTemplate.update(sql, securityClearanceId) > 0;
     }
+
+    public boolean isSecurityClearanceInUse(int securityClearanceId) {
+        final String sql = "select count(*) "
+                + "from agency_agent " // replace with your actual table name
+                + "where security_clearance_id = ?;";
+
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, securityClearanceId);
+
+        return count > 0;
+    }
+
 }

@@ -8,10 +8,10 @@ Content-Type: application/json
     "identifier": "007",
     "activationDate": "2010-04-04",
     "securityClearance": {
-        "securityClearanceId": 1
+        "securityClearanceId": 4
     },
     "agent": {
-        "agentId": 2
+        "agentId": 1
     }
 }
 

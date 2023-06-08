@@ -45,12 +45,18 @@ public class SecurityClearanceService {
     }
 
 
-
     public Result<SecurityClearance> update(SecurityClearance securityClearance) {
         Result<SecurityClearance> result = validate(securityClearance);
         if (!result.isSuccess()) {
             return result;
         }
+
+        SecurityClearance existing = repository.findByName(securityClearance.getName());
+        if (existing != null && existing.getSecurityClearanceId() != securityClearance.getSecurityClearanceId()) {
+            result.addMessage("Security Clearance with the same name already exists", ResultType.INVALID);
+            return result;
+        }
+
         if (!repository.update(securityClearance)) {
             result.addMessage("Failed to update Security Clearance", ResultType.NOT_FOUND);
         }
@@ -58,9 +64,22 @@ public class SecurityClearanceService {
         return result;
     }
 
-    public boolean deleteById(int securityClearanceId) {
-        return repository.deleteById(securityClearanceId);
+
+
+    public Result<Void> deleteById(int securityClearanceId) {
+        Result<Void> result = new Result<>();
+
+        // Check if SecurityClearance is in use
+        if (repository.isSecurityClearanceInUse(securityClearanceId)) {
+            result.addMessage("Security Clearance is in use and cannot be deleted", ResultType.INVALID);
+        } else if (!repository.deleteById(securityClearanceId)) { // If SecurityClearance is not in use, attempt the deletion
+            result.addMessage("Couldn't find Security Clearance", ResultType.NOT_FOUND);
+        }
+
+        return result;
     }
+
+
 
     private Result<SecurityClearance> validate(SecurityClearance securityClearance) {
         Result<SecurityClearance> result = new Result<>();
