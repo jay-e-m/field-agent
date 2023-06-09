@@ -1,66 +1,49 @@
-# Field Agent Plan
+# Field Agent Front-End Development
 
-## Security Clearance
+## Setup
+- [ ] Initialize HTML, CSS, JavaScript files.
+- [ ] Import Bootstrap CSS for interface styling.
+- [ ] Reference JavaScript file in HTML.
 
-... TODO
+## Navigation
+- [ ] Display a list of all active agents and include an option to add an agent.
+- [ ] If time allows, edit navigation to future-proof it a bit (Maybe start with select agency?).
 
-## Alias
+## Agent Display
+- [ ] Write `fetchAgents()` to send GET request to `/api/agents`.
+  - [ ] Transform response data into usable format.
+- [ ] Use `displayAgents()` to show fetched agents.
+  - [ ] Structure HTML string to show agent data in a summary format (not all properties).
+  - [ ] Append string to HTML elements.
+  - [ ] Embed "Edit" and "Delete" buttons in each row, triggering `handleEdit(id)` and `handleDelete(id)` respectively.
 
-### Domain Rules
+## Agent Addition
+- [ ] Set up "Add An Agent" button in the Display All Agents view.
+- [ ] Set up form for new agent input when "Add An Agent" is clicked.
+  - [ ] Implement input fields for agent properties.
+  - [ ] Include "Submit" button.
+- [ ] Write `addAgent()` to send POST request to `/api/agents`.
+  - [ ] Gather form data into agent object.
+  - [ ] Send POST request with agent object.
+  - [ ] Update displayed agents list.
 
-* Name is required.
-* Persona is not required unless a name is duplicated. The persona differentiates between duplicate names.
+## Agent Update
+- [ ] Construct form for agent editing when "Edit" button is clicked.
+  - [ ] Utilize same input fields structure as new agent form.
+  - [ ] Embed "Update" button to confirm changes.
+- [ ] Write `updateAgent()` to send PUT request to `/api/agents/{id}`.
+  - [ ] Gather edited form data into agent object.
+  - [ ] Send PUT request with edited agent object.
+  - [ ] Refresh displayed agents list.
 
-#### Examples
+## Agent Deletion
+- [ ] Write `deleteAgent()` to send DELETE request to `/api/agents/{id}`.
+  - [ ] Attach function to "Delete" button within each agent row.
+  - [ ] Send DELETE request on button click.
+  - [ ] Refresh displayed agents list.
 
-`name` = "Nutmeg", `persona` = null
-`name` = "Nutmeg", `persona` = "Mysterious, like eggnog"
-~~`name` = "Nutmeg", `persona` = "Mysterious, like eggnog"~~
-
-### Model
-
-* [x] `Alias`
-  * private int aliasId
-  * private String name
-  * private String persona
-  * private int agentId
-
-### Fetch an individual agent with aliases attached
-
-* [x] Add list of `Alias` to `Agent`
-* [x] Add `AliasMapper`
-* [x] Add method to add aliases in `AgentJdbcTemplateRepository.findById()`
-
-### Add an alias
-
-* [x] Add `AliasRepository`
-  * [x] Add `add` method `Alias add()`
-* [x] Add `AliasService`
-  * [x] Add `add` method: `Result<Alias> add()`
-  * [x] Add validations
-* [x] Add `AliasController`
-  * [x] `ResponseEntity<Object> add()`
-    * 201 if success
-    * 400 if invalid
-
-### Update an alias
-
-* [x] Repository `boolean update()`
-* [x] Service `Result<Alias> update()`
-* [x] Controller `ResponseEntity<Object> update()`
-  * 404 if not found
-  * 400 if invalid
-  * 204 if success
-  * 409 for id mismatch
-
-### Delete an alias
-
-* [x] Repository `boolean deleteById()`
-* [x] Service `boolean deleteById()`
-* [x] Controller `ResponseEntity<Object> deleteById()`
-  * 404 if not found
-  * 204 if success
-
-## Global Exception Handling
-
-... TODO
+## List
+- [ ] Generate HTML string to represent agent rows in `renderList()`.
+  - [ ] Loop through agents list, converting each into row HTML.
+  - [ ] Include agent data within row.
+  - [ ] Embed "Edit" button in each row, triggering `handleEdit(id)`.
