@@ -44,4 +44,12 @@ public class SecurityClearance {
     public int hashCode() {
         return Objects.hash(securityClearanceId, name);
     }
+
+    @Override
+    public String toString() {
+        return "SecurityClearance{" +
+                "securityClearanceId=" + securityClearanceId +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
