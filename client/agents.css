@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 10px;
+  }
+  
+  .navbar {
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .btn-dark {
+    margin-left: 20px;
+  }
+  
+  .container-fluid {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
+  #listView .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  #listView .col-sm-6 {
+    margin-bottom: 20px;
+  }
+  
+  #formView {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .card {
+    border: none;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  #message {
+    margin-top: 20px;
+  }
+
+  .submit-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  #loadingSpinner {
+    margin-left: 10px;
+  }
+
+  #cancel {
+    margin-left: 5px;
+  }
+  
+  
