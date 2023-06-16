@@ -101,16 +101,27 @@ const handleFormSubmit = async (event) => {
     heightInInches: document.getElementById('heightInInches').value,
   };
 
+  let success;
+
   if (currentAgentId) {
     agent.agentId = currentAgentId;
-    await updateAgent(agent);
+    success = await updateAgent(agent);
   } else {
-    await addAgent(agent);
+    success = await addAgent(agent);
   }
 
-  hideForm();
-  refreshList();
+  if (success) {
+    document.getElementById('loadingSpinner').style.display = 'block'; 
+    setTimeout(() => {
+      document.getElementById('loadingSpinner').style.display = 'none';
+      hideForm();
+      refreshList();
+    }, 3000);
+  }
 };
+
+
+
 
 const addAgent = async (agent) => {
   try {
@@ -121,11 +132,18 @@ const addAgent = async (agent) => {
       },
       body: JSON.stringify(agent),
     });
-    if (!response.ok) {
-      throw new Error('Failed to add agent');
+
+    if (response.ok) {
+      displayMessage("Agent added successfully");
+      return true;
+    } else if (response.status === 400) {
+      const messages = await response.json();
+      displayMessage(`Failed to add agent: ${messages}`, false);
+      return false;
     }
   } catch (error) {
     console.error('Failed to add agent', error);
+    return false;
   }
 };
 
@@ -138,13 +156,22 @@ const updateAgent = async (agent) => {
       },
       body: JSON.stringify(agent),
     });
-    if (!response.ok) {
-      throw new Error('Failed to update agent');
+
+    if (response.ok) {
+      displayMessage("Agent updated successfully");
+      return true;
+    } else if (response.status === 400) {
+      const messages = await response.json();
+      displayMessage(`Failed to update agent: ${messages}`, false);
+      return false;
     }
   } catch (error) {
     console.error('Failed to update agent', error);
+    return false;
   }
 };
+
+
 
 const handleDelete = async (id) => {
   try {
@@ -176,5 +203,18 @@ const handleCancel = () => {
   hideForm();
 };
 
+const displayMessage = (message, success = true) => {
+  const messageElement = document.getElementById('message');
+  
+  messageElement.textContent = message;
+  messageElement.classList.add(success ? 'alert-success' : 'alert-danger');
+  messageElement.style.display = 'block';
+
+  setTimeout(() => {
+    messageElement.textContent = '';
+    messageElement.style.display = 'none';
+    messageElement.classList.remove(success ? 'alert-success' : 'alert-danger');
+  }, 5000);
+};
 
 init();
